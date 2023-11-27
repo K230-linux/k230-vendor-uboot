@@ -35,45 +35,27 @@
 #define CONFIG_SYS_NS16550_MEM32
 #define DWC2_UTMI_WIDTH 16
 
-#if defined(CONFIG_TARGET_K230_CANMV)
-#define ENV_K230_BOARD_BOOT \
-	"rv64_k230_canmv=load mmc 1:1 0x0 /k230_canmv_rv64.bin; \0" \
-	"rv64_k230=run rv64_k230_canmv; \0"
-#endif
-
-#if defined(CONFIG_TARGET_K230_EVB)
-#define ENV_K230_BOARD_BOOT \
-	"rv64_k230_evb=load mmc 1:1 0x0 /k230_evb_rv64.bin; \0" \
-	"rv64_k230=run rv64_k230_evb; \0"
-#endif
-
-#if defined(CONFIG_TARGET_K230_CANMV_01STUDIO)
-#define ENV_K230_BOARD_BOOT \
-	"rv64_k230_canmv=load mmc 0:1 0x0 /k230_canmv_01studio_rv64.bin; \0" \
-	"rv64_k230=run rv64_k230_canmv; \0"
-#endif
-
+#ifndef CONFIG_SPL_BUILD
 #define CONFIG_EXTRA_ENV_SETTINGS \
-	"dtb_addr=0x2000000 \0" \
 	"fdt_high=0x2100000\0" \
-	"kernel_addr=0x4100000\0" \
-	"ramdisk_addr=0x2100000\0" \
-	"ipaddr=10.99.105.44\0" \
-	"serverip=10.10.1.94\0" \
-	"gatewayip=10.99.105.254\0" \
-	"netmask=255.255.255.0\0" \
 	"console_port=console=ttyS1,115200\0" \
-	"usb_load=usb start; dhcp; tftp $ramdisk_addr jiangxiangbing/rtt_systems.bin; k230_boot mem $ramdisk_addr 0x$filesize; tftp $kernel_addr jiangxiangbing/fw_payload.img;tftp $ramdisk_addr jiangxiangbing/rootfs-final.cpio.gz;tftp $dtb_addr jiangxiangbing/k230.dtb\0" \
-	"bootcmd_usb=run usb_load; bootm $kernel_addr - $dtb_addr \0" \
-	"bootcmd_baremetal= mmc dev 1; mmc read 0 0x5000 0xa000; boot_baremetal 1 0 1400000;\0" \
-	"k230_go=go 0x0; \0" \
-	ENV_K230_BOARD_BOOT \
-	"bootcmd=run rv64_k230; run k230_go; \0" \
-	"upspiuboot=usb start; dhcp;  tftp 0xc100000 10.10.1.94:wjx/u-boot.img && sf probe 0:0;sf erase 0x80000 0x180000; sf update  0x$fileaddr 0x80000  0x$filesize; \0" \
-	"upspiimg=usb start; dhcp;  tftp 0x9000000 10.10.1.94:wjx/sysimage-spinor32m.img;sf probe 0:0;sf erase 0 0x2000000;sf write   0x$fileaddr  0 0x$filesize; \0" \
-	"upsduboot=usb start; dhcp;  tftp 0xc100000 10.10.1.94:wjx/u-boot.img && mmc dev 1; mmc write  0x$fileaddr 0x1000  0xc00; \0" \
-	"upsdimg=usb start; dhcp;  tftp 0x9000000 10.10.1.94:wjx/sysimage-sdcard.img.gz;gzwrite mmc 1 0x$fileaddr  0x$filesize; \0" \
+	"fdt_addr_r=0x2000000\0" \
+	"fdtoverlay_addr_r=0x2100000\0" \
+	"pxefile_addr_r=0x2200000\0" \
+	"scriptaddr=0x2200000\0" \
+	"ramdisk_addr_r=0x2300000\0" \
+	"kernel_addr_r=0x4100000\0" \
+	"fdtfile=k230.dtb\0" \
+	BOOTENV \
+	"bootcmd=k230_boot auto auto_boot; \0" \
 	"\0"
+
+#define BOOT_TARGET_DEVICES(func) \
+	func(MMC, mmc, 1)
+
+#include <config_distro_bootcmd.h>
+#endif
+
 #ifdef CONFIG_SPL_BUILD
 #define CONFIG_SPL_PANIC_ON_RAW_IMAGE
 #endif 
