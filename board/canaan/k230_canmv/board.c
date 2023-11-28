@@ -17,11 +17,6 @@
 #include <env_internal.h>
 #include <linux/delay.h>
 
-sysctl_boot_mode_e sysctl_boot_get_boot_mode(void)
-{
-	return SYSCTL_BOOT_SDIO1;
-}
-
 #ifdef CONFIG_BOARD_LATE_INIT
 int board_late_init(void)
 {
