@@ -32,12 +32,7 @@
 #include <command.h>
 #include <image.h>
 #if 0
-#include <pufs_hmac.h>
-#include <pufs_ecc.h>
-#include <pufs_rt.h>
 #include <image.h>
-#include <pufs_sp38d.h>
-#include <pufs_ecp.h>
 #include <gzip.h>
 #endif 
 
@@ -92,7 +87,6 @@ int board_init(void)
     return 0;
 }
 //#define CONFIG_HAVE_HARD_UNZIP
-//#define CONFIG_K230_PUFS
 #ifdef CONFIG_HAVE_HARD_UNZIP
 int gunzip(void *dst, int dstlen, unsigned char *src, unsigned long *lenp){
     printf("my gunzip\n");
@@ -109,7 +103,6 @@ int k230_check_and_get_plain_data(firmware_head_s *pfh, ulong *pplain_addr)
     uint32_t uint32_tmp=0xa000000;
     
     int ret = 0;
-    //pufs_dgst_st md;
 
     if(pfh->magic != MAGIC_NUM){
         printf("magic error %x : %x \n", MAGIC_NUM, pfh->magic);
@@ -118,11 +111,7 @@ int k230_check_and_get_plain_data(firmware_head_s *pfh, ulong *pplain_addr)
         
     if(pfh->crypto_type == NONE_SECURITY){        
         //校验完整性
-        #ifdef  CONFIG_K230_PUFS
-		ret = pufs_hash(&md, (const uint8_t*)(pfh + 1), pfh->length, SHA_256);
-        #else 
         //sha256_csum_wd((const uint8_t*)(pfh + 1), pfh->length, md.dgst, CHUNKSZ_SHA256);
-        #endif   
 
         // if(memcmp(md.dgst, pfh->verify.none_sec.signature, SHA256_SUM_LEN) )   
         //     return -3; 
@@ -131,27 +120,6 @@ int k230_check_and_get_plain_data(firmware_head_s *pfh, ulong *pplain_addr)
             *pplain_addr = (ulong)pfh + sizeof(*pfh) ; 
 
 	} else  if(pfh->crypto_type == INTERNATIONAL_SECURITY) {
-        #ifdef CONFIG_K230_PUFS
-        //验证mac签名
-        char *gcm_tag = (char *)pfh + pfh->length - 16;
-        ret = pufs_rsa_p1v15_verify(pfh->verify.rsa.signature, 
-                                    RSA2048, 
-                                    pfh->verify.rsa.n, 
-                                    pfh->verify.rsa.e, 
-                                    gcm_tag, 
-                                    16);
-        if (ret )  
-            return CMD_RET_FAILURE;
-
-        //gcm解密,同时保证完整性；获取明文        
-        ret = pufs_dec_gcm((uint8_t *)pplaint, &uint32_tmp, (const uint8_t *)(pfh+1), pfh->length - 16,
-             AES, OTPKEY, OTPKEY_2, 256, (const uint8_t *)gcm_iv, 12, NULL, 0, gcm_tag, 16);
-        if (ret )  
-            return CMD_RET_FAILURE;      
-
-        #endif           
-
-       
         //pUimgh = (image_header_t *)(pplaint);    
         if(pplain_addr) 
             *pplain_addr = (ulong)pplaint;
