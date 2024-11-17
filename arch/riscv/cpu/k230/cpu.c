@@ -42,7 +42,7 @@ static inline void improving_cpu_performance(void)
 	csr_write(CSR_MCOR, 0x70013);
 	csr_write(CSR_MCCR2, 0xe0000009);
 	csr_write(CSR_MHCR, 0x11ff); //Enable L1 Cache
-	csr_write(CSR_MXSTATUS, 0x638000);
+	csr_write(CSR_MXSTATUS, 0x438000);
 	csr_write(CSR_MHINT, 0x6e30c);
 
 	csr_write(CSR_SMPEN, 0x1);
