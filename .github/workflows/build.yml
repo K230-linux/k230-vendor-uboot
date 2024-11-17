@@ -26,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         name: [gcc-13]
-        board: [canmv, evb]
+        board: [canmv, evb, canmv_01studio]
 
     runs-on: ubuntu-22.04
 
