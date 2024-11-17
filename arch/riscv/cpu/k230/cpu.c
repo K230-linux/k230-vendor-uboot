@@ -79,10 +79,6 @@ void harts_early_init(void)
 
 	writel(0x80199805, (void*)0x91100004);
 
-	csr_write(pmpaddr0, 0x24484dff);//start addr：0x24484c00<<2=0x91213000 len=1<<9 * 8 = 4KB
-	csr_write(pmpaddr1, 0x244851ff);//start addr：0x24485000<<2=0x91214000 len=1<<9 * 8 = 4KB
-	csr_write(pmpcfg0, 0x9999);
-
 	//improving_cpu_performance();
 }
 u32 spl_boot_device(void)
