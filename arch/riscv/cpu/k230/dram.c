@@ -127,6 +127,8 @@ __weak int ddr_init_training(void)
 		sip_ddr_init_3200_have_all_odt();	
 	#elif defined(CONFIG_CANMV_LPDDR3_2133)
 		pi_ddr_init_2133();
+	#elif defined(CONFIG_CANMV_01STUDIO_LPDDR4_2667)
+		ddr_init_2667();
     #elif defined(CONFIG_SIPLP4_1600)
 		sip_ddr_init_1600();
 	#elif defined(CONFIG_SIPLP4_2667)

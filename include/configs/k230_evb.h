@@ -47,6 +47,12 @@
 	"rv64_k230=run rv64_k230_evb; \0"
 #endif
 
+#if defined(CONFIG_TARGET_K230_CANMV_01STUDIO)
+#define ENV_K230_BOARD_BOOT \
+	"rv64_k230_canmv=load mmc 0:1 0x0 /k230_canmv_01studio_rv64.bin; \0" \
+	"rv64_k230=run rv64_k230_canmv; \0"
+#endif
+
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"dtb_addr=0x2000000 \0" \
 	"fdt_high=0x2100000\0" \
