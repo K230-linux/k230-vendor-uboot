@@ -6,13 +6,13 @@ import codecs
 # hash需要调用的库
 import hashlib, binascii
 # AES-GCM需要调用的库
-from Cryptodome.Cipher import AES
+from Crypto.Cipher import AES
 import struct
 # RSA-2048需要调用的库
-from Cryptodome.PublicKey import RSA
-from Cryptodome.Signature import pkcs1_15
-from Cryptodome.Hash import SHA256
-from Cryptodome.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
+from Crypto.Cipher import PKCS1_OAEP
 from base64 import b64encode
 
 
