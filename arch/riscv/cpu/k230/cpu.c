@@ -34,6 +34,7 @@
 #include <spl.h>
 #include <asm/cache.h>
 #include <linux/delay.h>
+#include <k230_board_common.h>
 #include "platform.h"
 
 static inline void improving_cpu_performance(void)
