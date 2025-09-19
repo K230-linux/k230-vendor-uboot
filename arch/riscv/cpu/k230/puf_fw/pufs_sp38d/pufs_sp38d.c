@@ -24,6 +24,7 @@
 #include "pufs_sp38d_internal.h"
 #include "pufs_ka_internal.h"
 #include "pufs_dma_internal.h"
+#include "cpu_func.h"
 #include "platform.h"
 
 #pragma GCC push_options
@@ -228,14 +229,14 @@ static pufs_status_t __sp38d_ctx_update(uint8_t* out,
     cb_dma_write_data_block_config(sp38d_ctx->start ? false : true, last, true, true, 0);
 
     cb_dma_write_rwcfg(out, in, inlen);
-    flush_dcache_range((uint64_t *)in, in+inlen);  //csi_dcache_clean_range
+    flush_dcache_range((unsigned long)in, (unsigned long)in+inlen);  //csi_dcache_clean_range
     
     if ((check = cb_sp38d_prepare(out, inlen)) != SUCCESS)
         return check;
 
     if (out != NULL)
     {
-        invalidate_dcache_range((uint64_t *)out, out+inlen);//csi_dcache_clean_invalid_range
+        invalidate_dcache_range((unsigned long)out, (unsigned long)out+inlen);//csi_dcache_clean_invalid_range
     }
     cb_dma_write_start();
     while (cb_dma_check_busy_status(&val32));

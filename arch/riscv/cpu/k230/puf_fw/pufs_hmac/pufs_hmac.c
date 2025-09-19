@@ -24,6 +24,7 @@
 #include "pufs_ka_internal.h"
 #include "pufs_dma_internal.h"
 #include <common.h>
+#include <cpu_func.h>
 #include "platform.h"
 #include "pufs_ecp.h"
 #pragma GCC push_options
@@ -63,7 +64,7 @@ static pufs_status_t __hmac_ctx_update(pufs_dgst_st* md,
     cb_dma_write_config_0(false, false, false);
     cb_dma_write_data_block_config(hmac_ctx->start ? false : true, last, true, true, 0);
 
-    flush_dcache_range((uint64_t *)msg, msg+msglen); // //csi_dcache_clean_range
+    flush_dcache_range((unsigned long)msg, (unsigned long)msg+msglen); // //csi_dcache_clean_range
     cb_dma_write_rwcfg(NULL, msg, msglen);
 
     cb_dma_write_key_config_0(hmac_ctx->keytype,
