@@ -62,38 +62,38 @@ static void device_disable(void)
     uint32_t value;
 
     // disable ai power
-    if (readl(0x9110302c) & 0x2)
-        writel(0x30001, 0x91103028);
+    if (readl((const volatile void __iomem *)0x9110302c) & 0x2)
+        writel(0x30001, (volatile void __iomem *)0x91103028);
     // disable vpu power
-    if (readl(0x91103080) & 0x2)
-        writel(0x30001, 0x9110307c);
+    if (readl((const volatile void __iomem *)0x91103080) & 0x2)
+        writel(0x30001, (volatile void __iomem *)0x9110307c);
     // disable dpu power
-    if (readl(0x9110310c) & 0x2)
-        writel(0x30001, 0x91103108);
+    if (readl((const volatile void __iomem *)0x9110310c) & 0x2)
+        writel(0x30001, (volatile void __iomem *)0x91103108);
     // disable disp power
-    if (readl(0x91103040) & 0x2)
-        writel(0x30001, 0x9110303c);
+    if (readl((const volatile void __iomem *)0x91103040) & 0x2)
+        writel(0x30001, (volatile void __iomem *)0x9110303c);
     // check disable status
     value = 1000000;
-    while (!(readl(0x9110302c) & 0x1) || !(readl(0x91103080) & 0x1) ||
-        !(readl(0x9110310c) & 0x1) || !(readl(0x91103040) & 0x1) && value)
+    while (!(readl((const volatile void __iomem *)0x9110302c) & 0x1) || !(readl((const volatile void __iomem *)0x91103080) & 0x1) ||
+        !(readl((const volatile void __iomem *)0x9110310c) & 0x1) || !(readl((const volatile void __iomem *)0x91103040) & 0x1) && value)
         value--;
     // disable ai clk
-    value = readl(0x91100008);
+    value = readl((const volatile void __iomem *)0x91100008);
     value &= ~((1 << 0));
-    writel(value, 0x91100008);
+    writel(value, (volatile void __iomem *)0x91100008);
     // disable vpu clk
-    value = readl(0x9110000c);
+    value = readl((const volatile void __iomem *)0x9110000c);
     value &= ~((1 << 0));
-    writel(value, 0x9110000c);
+    writel(value, (volatile void __iomem *)0x9110000c);
     // disable dpu clk
-    value = readl(0x91100070);
+    value = readl((const volatile void __iomem *)0x91100070);
     value &= ~((1 << 0));
-    writel(value, 0x91100070);
+    writel(value, (volatile void __iomem *)0x91100070);
     // disable mclk
-    value = readl(0x9110006c);
+    value = readl((const volatile void __iomem *)0x9110006c);
     value &= ~((1 << 0) | (1 << 1) | (1 << 2));
-    writel(value, 0x9110006c);
+    writel(value, (volatile void __iomem *)0x9110006c);
 }
 
 //weak;

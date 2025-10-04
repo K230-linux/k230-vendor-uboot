@@ -28,3 +28,4 @@ obj-y += cpu.o
 obj-y += cache.o
 obj-y += unzip.o
 EXTRA_CFLAGS += -I$(srctree)/arch/$(ARCH)/cpu/k230
+EXTRA_CFLAGS += -I$(srctree)/board/canaan/common
